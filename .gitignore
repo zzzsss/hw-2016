@@ -60,3 +60,7 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+stanfordSentimentTreebank
+conll_scorer
+conll_data
