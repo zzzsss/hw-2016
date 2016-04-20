@@ -64,3 +64,4 @@ target/
 stanfordSentimentTreebank
 conll_scorer
 conll_data
+scp*
