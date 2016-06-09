@@ -16,7 +16,7 @@ import os
 #     # return copy.deepcopy(plist)
 
 def weak_one(plist, L, r):
-    print(plist)
+    # print(plist)
     # write file
     with open("in", 'w') as f:
         f.write("%d %d\n" % (L, r))
