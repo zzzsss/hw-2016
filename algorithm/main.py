@@ -29,16 +29,17 @@ def main():
     print(real_configs)
     # execute for "times" time
     ret = []
+    pindexes = [[i for i in range(real_configs["p_n"])]]
     for i in range(real_configs["p_times"]):
         plist = random_init(real_configs["p_n"], real_configs["p_L"], real_configs["p_W"])
         if real_configs["p_weak"]:
             if real_configs["p_k"] > 1:
-                pfinal = weak_k(plist, real_configs["p_L"], real_configs["p_r"], real_configs["p_k"], real_configs["policy"])
+                pfinal, pindexes = weak_k(plist, real_configs["p_L"], real_configs["p_r"], real_configs["p_k"], real_configs["policy"])
             else:
                 pfinal = weak_one(plist, real_configs["p_L"], real_configs["p_r"])
         else:
             if real_configs["p_k"] > 1:
-                pfinal = strong_k(plist, real_configs["p_L"], real_configs["p_r"], real_configs["p_k"], real_configs["policy"], real_configs["weight"], real_configs["simplepost"])
+                pfinal, pindexes = strong_k(plist, real_configs["p_L"], real_configs["p_r"], real_configs["p_k"], real_configs["policy"], real_configs["weight"], real_configs["simplepost"])
             else:
                 pfinal = strong_one(plist, real_configs["p_L"], real_configs["p_r"], real_configs["simplepost"])
         ret.append([plist, pfinal])
@@ -52,7 +53,7 @@ def main():
     # print(ret)
     print("Average distance is: %s and avg/r is: %s" % (dis, dis/real_configs["p_r"]))
     if real_configs["p_times"] == 1:
-        draw_one(ret[0][0], ret[0][1], real_configs["p_r"], real_configs["p_L"], real_configs["p_W"])
+        draw_one(ret[0][0], ret[0][1], real_configs["p_r"], real_configs["p_L"], real_configs["p_W"], pindexes)
     return dis
 
 def test_k():

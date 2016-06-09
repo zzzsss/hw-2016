@@ -80,7 +80,7 @@ double weak_single(double L,double radius,vector<robot>& robots)
 	for(int i = 0;i<n-1;i++){
 		double l = robots[i+1].x-radius;
 		double r = robots[i].x+radius;
-		if(l<r&&l>=0.&&r<=L){
+		if(l<r){
 			overlaps.PB(overlap(l,r,i,i+1));
 		}
 	}

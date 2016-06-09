@@ -68,8 +68,9 @@ def _valuer_xy(all, one, r, weight):
 def valuer_xy(r, weight):
     return lambda all, one: _valuer_xy(all, one, r, weight)
 
+COLORS = ['b', 'r', 'g', 'y', 'k', 'm', 'c']
 # draw one
-def draw_one(before, after, r, L, W):
+def draw_one(before, after, r, L, W, pindexes):
     t = "".join(time.ctime().split()[3].split(":"))     #tag
     r *= 2
     # plot it
@@ -90,7 +91,12 @@ def draw_one(before, after, r, L, W):
     ax.set_yticks(np.linspace(-L/2,L/2,11))
     for i, x in enumerate(after):
         plt.annotate("p%s" % i, xy=(x[0], x[1]))
-        circle = Ellipse((x[0], x[1]), r, r, color='b', fill=False)
+        group_i = 0
+        for ind, group in enumerate(pindexes):
+            if i in group:
+                group_i = ind
+                break
+        circle = Ellipse((x[0], x[1]), r, r, color=COLORS[group_i % len(COLORS)], fill=False)
         ax.add_patch(circle)
     plt.show()
     # plt.savefig(t+"after")

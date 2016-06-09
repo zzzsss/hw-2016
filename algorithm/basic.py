@@ -45,9 +45,10 @@ def weak_k(plist, L, r, k, policy):
         oneafter = weak_one([plist[z] for z in one], L, r)
         for z, v in zip(one, oneafter):
             retlist[z] = v
-    return retlist
+    return retlist, indexes
 
 def strong_one(plist, L, r, post):
+    r += 0.0001  # for float tolerance
     retlist = weak_one(plist, L, r)
     # print(retlist)
     yvalue = np.average([z[1] for z in plist])
@@ -64,6 +65,7 @@ def strong_one(plist, L, r, post):
         left_dx = retlist[i][0] - retlist[i-1][0]
         right_dx = retlist[i+1][0] - retlist[i][0]
         # print(r, left_dx, right_dx)
+        # print(2*r, right_dx)
         left_dy = sqrt((2*r)**2 - left_dx**2)
         right_dy = sqrt((2*r)**2 - right_dx**2)
         left_up, left_down = left_y+left_dy, left_y-left_dy
@@ -90,4 +92,4 @@ def strong_k(plist, L, r, k, policy, weight, post):
         oneafter = strong_one([plist[z] for z in one], L, r, post)
         for z, v in zip(one, oneafter):
             retlist[z] = v
-    return retlist
+    return retlist, indexes
