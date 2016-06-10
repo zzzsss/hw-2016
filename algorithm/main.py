@@ -7,7 +7,7 @@ from math import sqrt
 # main procedure
 def main():
     # set the configs
-    configs = {"L":100, "rr":1.25, "L-W":2, "L-r":10, "k":1, "weak":1, "times":1, "policy":0, "weight":0.1, "simplepost": 0, "random":12345}
+    configs = {"L":100, "rr":1.5, "L-W":2, "L-r":10, "k":1, "weak":1, "times":1, "policy":0, "weight":0.1, "simplepost": 0, "random":12345}
     for s in sys.argv[1:]:
         tmp_l = s.split(":")
         assert len(tmp_l)==2
@@ -24,7 +24,7 @@ def main():
     real_configs["p_weak"] = bool(int(configs["weak"]))
     real_configs["p_times"] = int(configs["times"])
     real_configs["policy"] = int(configs["policy"])
-    real_configs["weight"] = int(configs["weight"])
+    real_configs["weight"] = float(configs["weight"])
     real_configs["simplepost"] = int(configs["simplepost"])
     print(real_configs)
     # execute for "times" time
@@ -54,7 +54,7 @@ def main():
     print("Average distance is: %s and avg/r is: %s" % (dis, dis/real_configs["p_r"]))
     if real_configs["p_times"] == 1:
         draw_one(ret[0][0], ret[0][1], real_configs["p_r"], real_configs["p_L"], real_configs["p_W"], pindexes)
-    return dis
+    return (real_configs["p_n"],dis,dis*real_configs["p_n"])
 
 def test_k():
     # k set from 1 to 10
@@ -67,10 +67,10 @@ def test_k():
     # print for latex table
     for i, one in enumerate(l):
         if i == len(l)-1:
-            print(r"%.2f\\" % one, end='')
+            print(r"%.1f\\" % one[1], end='')
         else:
-            print("%.2f&" % one, end='')
+            print("%.1f&" % one[1], end='')
 
 if __name__ == "__main__":
     # test_k()
-    main()
+    print("#n/avgDist/totalDist:", main())

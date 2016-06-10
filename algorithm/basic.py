@@ -4,7 +4,7 @@ import copy
 import numpy as np
 from math import sqrt
 from subprocess import Popen, PIPE
-import os
+import os, sys
 
 # !! always return new ones and always assuming sorted by x
 
@@ -23,9 +23,13 @@ def weak_one(plist, L, r):
         for p in plist:
             f.write("%f %f\n" % (p[0], p[1]))
     # execute
-    if not os.path.exists("a.exe"):
+    if sys.platform == "win32":
+        tmp_cmd = "a.exe"
+    else:
+        tmp_cmd = "./a.out"
+    if not os.path.exists(tmp_cmd):
         os.system("g++ -std=c++11 code.cpp")
-    p = Popen("a.exe", shell=True, stdout=PIPE, stderr=PIPE)
+    p = Popen(tmp_cmd, shell=True, stdout=PIPE, stderr=PIPE)
     # p.wait()
     out = p.stdout.readlines()
     # print(out)
@@ -48,7 +52,7 @@ def weak_k(plist, L, r, k, policy):
     return retlist, indexes
 
 def strong_one(plist, L, r, post):
-    r += 0.0001  # for float tolerance
+    # r += 0.0001  # for float tolerance
     retlist = weak_one(plist, L, r)
     # print(retlist)
     yvalue = np.average([z[1] for z in plist])
@@ -57,6 +61,7 @@ def strong_one(plist, L, r, post):
     if post == 0:
         return retlist
     # simple post processing
+    # print(retlist)
     for i in range(1, len(plist)-1):
         # skip the first and last one for simplicity
         left_y = retlist[i-1][1]
@@ -66,8 +71,14 @@ def strong_one(plist, L, r, post):
         right_dx = retlist[i+1][0] - retlist[i][0]
         # print(r, left_dx, right_dx)
         # print(2*r, right_dx)
-        left_dy = sqrt((2*r)**2 - left_dx**2)
-        right_dy = sqrt((2*r)**2 - right_dx**2)
+        if (2*r) < left_dx:     # for float tolerance
+            left_dy = 0
+        else:
+            left_dy = sqrt((2*r)**2 - left_dx**2)
+        if (2*r) < right_dx:
+            right_dy = 0
+        else:
+            right_dy = sqrt((2*r)**2 - right_dx**2)
         left_up, left_down = left_y+left_dy, left_y-left_dy
         right_up, right_down = right_y+right_dy, right_y-right_dy
         mup = min(left_up, right_up)

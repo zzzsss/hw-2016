@@ -1,8 +1,11 @@
 import random
 import operator
 import time
-import matplotlib.pyplot as plt
-from matplotlib.patches import Ellipse
+try:
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Ellipse
+except:
+    pass
 import numpy as np
 
 # generate the random init points
